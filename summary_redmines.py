@@ -39,12 +39,12 @@ class Node:
             item_map[item.id] = cls(item)
         
         item_root = []
-        for Node in item_map.values():
-            if (Node.has_parent and (Node.item.parent.id in item_map)):
-                parent_id = Node.item.parent.id
-                item_map[parent_id].add_child(Node)
+        for node in item_map.values():
+            if (node.has_parent and (node.item.parent.id in item_map)):
+                parent_id = node.item.parent.id
+                item_map[parent_id].add_child(node)
             else:
-                item_root.append(Node)
+                item_root.append(node)
         item_map.clear()
         return item_root
 
@@ -100,6 +100,6 @@ for key in conf:
     print("%s has %d projects" % (key, len(projects)))
 
     project_root = ProjectNode.item_root(projects)
-    for Node in project_root:
-        Node.trace()
+    for node in project_root:
+        node.trace()
     
