@@ -1,4 +1,4 @@
-#! python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 #  Created by NAKAJIMA Takaaki on Nov 25, 2014.
@@ -31,7 +31,7 @@ class Node:
                 child.trace(family)
         family.pop()
 
-    def execute(self, family):
+    def execute(self, family=None):
         print("%s has %d children" % ('/'.join(family), len(self.children)))
 
     @classmethod
@@ -51,14 +51,25 @@ class Node:
         return item_root
 
 class IssueNode(Node):
+    def str(self):
+        message = """Issue:[{id}] {subject} 
+担当者: {assigned_to}
+"""
+        return message.format(id=self.item.id,
+                subject=self.item.subject,
+                assigned_to=self.item.assigned_to)
+
     def execute(self, family):
-        print("Issue:[%d] %s" % (self.item.id, self.item.subject))
+        print(self.str())
+        print(self.item.__dict__)
 
 class ProjectNode(Node):
     def execute(self, family):
-        print("Project:%s has %d children" % ('/'.join(family), len(self.children)))
+        print("Project:%s has %d children" %
+                ('/'.join(family), len(self.children)))
         issues = redmine.issue.all(project_id=self.item.id)
-        print("Project:%s has %d issues" % ('/'.join(family), len(issues)))
+        print("Project:%s has %d issues" % 
+                ('/'.join(family), len(issues)))
 
         issue_root = IssueNode.item_root(issues)
         for node in issue_root:
