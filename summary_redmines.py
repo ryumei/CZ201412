@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
+#  summary_redmines.py: Sample
 #  Created by NAKAJIMA Takaaki on Nov 25, 2014.
-#  See also
-#  - http://python-redmine.readthedocs.org/index.html
-#  - http://qiita.com/mima_ita/items/1a939db423d8ee295c85
 #
 from redmine import Redmine
 import json
@@ -53,20 +51,31 @@ class Node:
 class IssueNode(Node):
     def str(self):
         message = """Issue:[{id}] {subject} 
+作成者: {author}
 担当者: {assigned_to}
+作成日: {created_on}
+開始日: {start_date}
+更新日: {updated_on}
+期日: {due_date}
+状態: {status}
+
 """
-        return message.format(id=self.item.id,
-                subject=self.item.subject,
-                assigned_to=self.item.assigned_to)
+        issue = self.item
+        return message.format(id=issue.id,
+                subject=issue.subject,
+                author=issue.author,
+                assigned_to=issue.assigned_to,
+                created_on=issue.created_on,
+                start_date=issue.start_date,
+                updated_on=issue.updated_on,
+                due_date=issue.due_date,
+                status=issue.status.name)
 
     def execute(self, family):
         print(self.str())
-        print(self.item.__dict__)
 
 class ProjectNode(Node):
     def execute(self, family):
-        print("Project:%s has %d children" %
-                ('/'.join(family), len(self.children)))
         issues = redmine.issue.all(project_id=self.item.id)
         print("Project:%s has %d issues" % 
                 ('/'.join(family), len(issues)))
