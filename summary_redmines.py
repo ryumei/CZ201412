@@ -6,6 +6,7 @@
 #
 from redmine import Redmine
 import json
+from jinja2 import Template, Environment, FileSystemLoader
 
 # ----------------------------------------------------------------------
 
@@ -49,40 +50,44 @@ class Node:
         return item_root
 
 class IssueNode(Node):
-    def str(self):
-        message = """Issue:[{id}] {subject} 
-作成者: {author}
-担当者: {assigned_to}
-作成日: {created_on}
-開始日: {start_date}
-更新日: {updated_on}
-期日: {due_date}
-状態: {status}
-
-"""
-        issue = self.item
-        return message.format(id=issue.id,
-                subject=issue.subject,
-                author=issue.author,
-                assigned_to=issue.assigned_to,
-                created_on=issue.created_on,
-                start_date=issue.start_date,
-                updated_on=issue.updated_on,
-                due_date=issue.due_date,
-                status=issue.status.name)
-
     def execute(self, family):
-        print(self.str())
+        print(self.item.id)
 
 class ProjectNode(Node):
+    env = Environment(loader=FileSystemLoader('./', encoding='utf8'))
+    issue_tmpl = env.get_template('issue.tmpl.html')
+    project_tmpl = env.get_template('project.tmpl.html')
+    
+    def url(self):
+        return 'REDMINE_BASE/projects/' + str(self.item.id)
+
+    def deduplicate_issues(self, issues):
+        project_id = self.item.id
+        deduplicated = []
+        for issue in issues:
+            if (issue.project.id == project_id):
+                deduplicated.append(issue)
+        return deduplicated
+
     def execute(self, family):
         issues = redmine.issue.all(project_id=self.item.id)
+        issues = self.deduplicate_issues(issues)
+        
+        project_html = self.project_tmpl.render({'name':' / '.join(family),
+                                                 'url':self.url(),
+                                                 'issues_size':len(issues)})
+        print project_html.encode('utf-8')
         print("Project:%s has %d issues" % 
                 ('/'.join(family), len(issues)))
-
+        
         issue_root = IssueNode.item_root(issues)
-        for node in issue_root:
-            node.execute([])
+        
+        issues_html = self.issue_tmpl.render({'issues':issue_root})
+        print issues_html.encode('utf-8')
+        
+        # [NOT USED] traverse issue tree
+        #for node in issue_root:
+        #    node.execute([])
 
 # ----------------------------------------------------------------------
 
@@ -90,6 +95,8 @@ class ProjectNode(Node):
 raw_conf_data = open('./conf.json')
 conf = json.load(raw_conf_data)
 raw_conf_data.close()
+
+print 'Content-Type: text/html; charset=utf-8\n'
 
 # Main routine
 for key in conf:
@@ -103,3 +110,9 @@ for key in conf:
     for node in project_root:
         node.trace()
     
+    #env = Environment(loader=FileSystemLoader('./', encoding='utf8'))
+    #tmpl = env.get_template('sample.tmpl.html')
+    
+    #html = tmpl.render({'title':u'サンプル', 'projects':projects})
+    #print "Content-Type: text/html; charset=utf-8\n"
+    #print html.encode('utf08')

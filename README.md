@@ -1,7 +1,10 @@
 
 # 事前準備
 
-    $ easy_install python-redmine
+Redmine へのアクセスに [python-remine](http://python-redmine.readthedocs.org/) を、
+出力のテンプレートエンジンに [jinja2](http://jinja.pocoo.org/) を利用しています。
+
+    $ easy_install python-redmine jinja2
 
 # 設定ファイル
 

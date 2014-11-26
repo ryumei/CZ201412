@@ -1,0 +1,10 @@
+<ul>
+  {%- for issue in issues recursive %}
+  <li>[{{ issue.item.id }}]  {{ issue.item.subject }} 
+  {%- if issue.children -%}
+    <ul>
+      {{ loop(issue.children) }}
+    </ul>
+  {%- endif %}</li>
+  {%- endfor %}
+</ul>
