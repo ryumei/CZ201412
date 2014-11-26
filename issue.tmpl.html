@@ -1,10 +1,36 @@
-<ul>
-  {%- for issue in issues recursive %}
-  <li>[{{ issue.item.id }}]  {{ issue.item.subject }} 
-  {%- if issue.children -%}
-    <ul>
+<table border=2>
+  <tr>
+    <th>チケット名</th>
+    <th>担当者</th>
+    <th>期日</th>
+    <th>状態</th>
+  </tr>
+  {% for issue in issues recursive %}
+  <tr><td><a href='{{ issue.url }}'>#{{ issue.item.id }}: {{ issue.item.subject }}</a></td>
+    <td class='
+	{%- if issue.assigned_to_status == 0 -%}
+	normal
+	{%- else -%}
+	warning
+	{%- endif -%}'>
+      {{ issue.assigned_to }}
+    </td>
+    <td class='
+	{%- if issue.due_date_status == 0 -%}
+	normal
+	{%- elif issue.due_date_status == 1 -%}
+	error
+	{%- else -%}
+	warning
+	{%- endif -%}'>
+      {{ issue.due_date }}
+    </td>
+    <td>
+      {{ issue.item.status }}
+    </td>
+  </tr>
+  {% if issue.children %}
       {{ loop(issue.children) }}
-    </ul>
-  {%- endif %}</li>
-  {%- endfor %}
-</ul>
+  {% endif %}
+  {% endfor %}
+</table>

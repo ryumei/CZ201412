@@ -1,4 +1,8 @@
 <h2><a href="{{ url }}">{{ name }}</a></h2>
 <p>
-{{ issues_size }} 個のチケットがあります。
+  {%- if issues_size > 0 -%}
+  {{ issues_size }} 個のチケットがあります。
+  {%- else -%}
+  チケットはありません。
+  {%- endif -%}
 </p>

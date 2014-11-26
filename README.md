@@ -6,11 +6,15 @@ Redmine へのアクセスに [python-remine](http://python-redmine.readthedocs.
 
     $ easy_install python-redmine jinja2
 
-# 設定ファイル
+# 設定ファイルの配置
 
     $ mv sample.conf.json conf.json
 
 Edit ``conf.json``
+
+# 実行例
+
+    $ python summary_redmines.py > output.html
 
 ## 動作確認環境
 

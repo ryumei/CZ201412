@@ -5,7 +5,5 @@
     "site_b": {
 	"site": "http://site_b/redmine/",
         "key": "API_KEY",
-	"project_filter": "work",
-	"user_filter": "nakajima"
     }
 }

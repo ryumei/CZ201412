@@ -1,0 +1,19 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300,800);
+
+.normal  { background-color: #fff; }
+.warning { background-color: #faac68; }
+.error   { background-color: #f78181; }
+
+html,
+body,
+table, tr, td, th {
+    overflow-x: hidden;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    color: #003;
+    background: #fff;
+}
+
+
+h1 { font-size: 140%; }
+h2 { font-size: 120%; }
