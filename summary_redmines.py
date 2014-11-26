@@ -7,10 +7,10 @@
 import json
 from redmine import Redmine
 from jinja2 import Environment, FileSystemLoader
+import datetime 
 from datetime import datetime 
-import re
 
-today = datetime.now()
+today = datetime.now().date()
 
 # ----------------------------------------------------------------------
 
@@ -53,18 +53,21 @@ class Node(object):
         item_map.clear()
         return item_root
 
+datetime_format = '%Y/%m/%d'
+
 class IssueNode(Node):
         
     def __init__(self, item, site_url):
-        global today
+        global today, datetime_format
         
         super(IssueNode, self).__init__(item)
         self.url = site_url + 'issues/' + str(self.item.id)
         
         # 期日のチェック
         if hasattr(item, 'due_date'):
-            due_date = datetime.strptime(item.due_date, '%Y/%m/%d')
             self.due_date = item.due_date
+            due_date = item.due_date
+            # due_date = datetime.strptime(item.due_date, datetime_format)
             if due_date <= today:
                 self.due_date_status = 0
             else:
@@ -118,7 +121,7 @@ class ProjectNode(Node):
         project_html = self.project_tmpl.render({'name':' / '.join(family),
                                                  'url':self.url,
                                                  'issues_size':len(issues)})
-        print(project_html.encode('utf-8'))
+        print(project_html)
 
         if (len(issues) < 1):
             return
@@ -126,11 +129,9 @@ class ProjectNode(Node):
         issue_root = IssueNode.item_root(issues, self.site_url)
         issues_html = self.issue_tmpl.render({'issues':issue_root})
 
-        print(issues_html.encode('utf-8'))
+        print(issues_html)
 
 # ----------------------------------------------------------------------
-
-
 
 # Load config
 raw_conf_data = open('./conf.json')
@@ -140,8 +141,8 @@ raw_conf_data.close()
 env = Environment(loader=FileSystemLoader('./template', encoding='utf-8'))
 header_tmpl = env.get_template('header.tmpl.html')
 
-#print('Content-Type: text/html; charset=utf-8\n')
-print(header_tmpl.render({'title':u'Redmine まとめ', 'generated_on':str(today)}).encode('utf-8'))
+print(header_tmpl.render({'title':u'Redmine まとめ',
+                          'generated_on':str(today)}))
 
 site_tmpl = env.get_template('site.tmpl.html')
 
@@ -151,7 +152,7 @@ for key in conf:
     site_url= site['site']
     redmine = Redmine(site_url, key=site[u'key'])
     
-    print(site_tmpl.render({'name':key, 'url':site_url}).encode('utf-8'))
+    print(site_tmpl.render({'name':key, 'url':site_url}))
 
     projects = redmine.project.all()
     
@@ -160,6 +161,6 @@ for key in conf:
         node.trace()
 
 footer_tmpl = env.get_template('footer.tmpl.html')
-print(footer_tmpl.render().encode('utf-8'))
+print(footer_tmpl.render())
 
 

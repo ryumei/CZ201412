@@ -4,7 +4,7 @@
 Redmine へのアクセスに [python-remine](http://python-redmine.readthedocs.org/) を、
 出力のテンプレートエンジンに [jinja2](http://jinja.pocoo.org/) を利用しています。
 
-    $ easy_install python-redmine jinja2
+    $ easy_install python-redmine Jinja2
 
 # 設定ファイルの配置
 

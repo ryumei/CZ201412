@@ -1,5 +1,5 @@
 <table class='issue'>
-  <tbody>
+<tbody>
   <tr>
     <th>チケット</th>
     <th>担当者</th>
@@ -29,7 +29,12 @@
       {{ issue.due_date }}
     </td>
     {# 状態 #}
-    <td>
+    <td class='
+    {%- if issue.status_status -%}
+    normal
+    {%- else -%}
+    error
+    {%- endif -%}'>
       {{ issue.item.status }}
     </td>
   </tr>
