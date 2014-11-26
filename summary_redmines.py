@@ -8,6 +8,7 @@ import json
 from redmine import Redmine
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime 
+import re
 
 today = datetime.now()
 
@@ -69,8 +70,8 @@ class IssueNode(Node):
             else:
                 self.due_date_status = 2
         else:
+            self.due_date = u'未設定'
             self.due_date_status = 1
-            self.item.due_date = u'未設定'
         
         # 担当者のチェック
         if hasattr(item, 'assigned_to'):
@@ -79,7 +80,15 @@ class IssueNode(Node):
         else:
             self.assigned_to_status = 1
             self.assigned_to = u'担当者なし'
-
+        
+        if item.status.id in [ 2, 3 ]: # checking or committed
+            self.status_status = True
+        else:
+            if self.due_date_status > 0 or self.assigned_to_status > 0:
+                self.status_status = False
+            else:
+                self.status_status = True
+        
     def execute(self, family):
         print("%d %s %s" % (self.item.id, self.item.subject))
         return self.item.id
