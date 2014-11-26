@@ -67,8 +67,10 @@ class IssueNode(Node):
         if hasattr(item, 'due_date'):
             self.due_date = item.due_date
             due_date = item.due_date
+            print(today)
+            print(item.due_date)
             # due_date = datetime.strptime(item.due_date, datetime_format)
-            if due_date <= today:
+            if today <= due_date:
                 self.due_date_status = 0
             else:
                 self.due_date_status = 2
