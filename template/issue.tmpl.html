@@ -1,12 +1,14 @@
-<table border=2>
+<table class='issue'>
+  <tbody>
   <tr>
-    <th>チケット名</th>
+    <th>チケット</th>
     <th>担当者</th>
     <th>期日</th>
     <th>状態</th>
   </tr>
   {% for issue in issues recursive %}
   <tr><td><a href='{{ issue.url }}'>#{{ issue.item.id }}: {{ issue.item.subject }}</a></td>
+    {# 担当者 #}
     <td class='
 	{%- if issue.assigned_to_status == 0 -%}
 	normal
@@ -15,6 +17,7 @@
 	{%- endif -%}'>
       {{ issue.assigned_to }}
     </td>
+    {# 期日 #}
     <td class='
 	{%- if issue.due_date_status == 0 -%}
 	normal
@@ -25,6 +28,7 @@
 	{%- endif -%}'>
       {{ issue.due_date }}
     </td>
+    {# 状態 #}
     <td>
       {{ issue.item.status }}
     </td>
@@ -33,4 +37,5 @@
       {{ loop(issue.children) }}
   {% endif %}
   {% endfor %}
+</tbody>
 </table>

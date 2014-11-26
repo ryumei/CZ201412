@@ -9,9 +9,7 @@ from redmine import Redmine
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime 
 
-import sys
-#reload(sys)
-#sys.setdefaultencoding('utf-8')
+today = datetime.now()
 
 # ----------------------------------------------------------------------
 
@@ -77,17 +75,17 @@ class IssueNode(Node):
         # 担当者のチェック
         if hasattr(item, 'assigned_to'):
             self.assigned_to_status = 0
-            self.assigned_to = u"調整中" #### TODO
-            # self.assigned_to = self.item.assigned_to.decode('utf-8')
+            self.assigned_to = self.item.assigned_to.name
         else:
             self.assigned_to_status = 1
             self.assigned_to = u'担当者なし'
 
     def execute(self, family):
+        print("%d %s %s" % (self.item.id, self.item.subject))
         return self.item.id
 
 class ProjectNode(Node):
-    env = Environment(loader=FileSystemLoader('./', encoding='utf-8'))
+    env = Environment(loader=FileSystemLoader('./template', encoding='utf-8'))
     issue_tmpl = env.get_template('issue.tmpl.html')
     project_tmpl = env.get_template('project.tmpl.html')
     
@@ -112,32 +110,31 @@ class ProjectNode(Node):
                                                  'url':self.url,
                                                  'issues_size':len(issues)})
         print(project_html.encode('utf-8'))
+
         if (len(issues) < 1):
             return
         
         issue_root = IssueNode.item_root(issues, self.site_url)
-        
         issues_html = self.issue_tmpl.render({'issues':issue_root})
+
         print(issues_html.encode('utf-8'))
-        
-        # [NOT USED] traverse issue tree
-        #for node in issue_root:
-        #    node.execute([])
 
 # ----------------------------------------------------------------------
 
-today = datetime.now()
+
 
 # Load config
 raw_conf_data = open('./conf.json')
 conf = json.load(raw_conf_data)
 raw_conf_data.close()
 
-
-env = Environment(loader=FileSystemLoader('./', encoding='utf-8'))
+env = Environment(loader=FileSystemLoader('./template', encoding='utf-8'))
 header_tmpl = env.get_template('header.tmpl.html')
-print('Content-Type: text/html; charset=utf-8\n')
-print(header_tmpl.render().encode('utf-8'))
+
+#print('Content-Type: text/html; charset=utf-8\n')
+print(header_tmpl.render({'title':u'Redmine まとめ', 'generated_on':str(today)}).encode('utf-8'))
+
+site_tmpl = env.get_template('site.tmpl.html')
 
 # Main routine
 for key in conf:
@@ -145,6 +142,8 @@ for key in conf:
     site_url= site['site']
     redmine = Redmine(site_url, key=site[u'key'])
     
+    print(site_tmpl.render({'name':key, 'url':site_url}).encode('utf-8'))
+
     projects = redmine.project.all()
     
     project_root = ProjectNode.item_root(projects, site_url)

@@ -1,8 +1,16 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300,800);
 
-.normal  { background-color: #fff; }
-.warning { background-color: #faac68; }
-.error   { background-color: #f78181; }
+.normal, table.issue tr td.normal {
+    background-color: #fff;
+}
+.warning, table.issue tr td.warning {
+    background-color: #faac68;
+    font-weight: 600;
+}
+.error, table.issue tr td.error{
+    background-color: #f78181;
+    font-weight: 900;
+}
 
 html,
 body,
@@ -10,10 +18,59 @@ table, tr, td, th {
     overflow-x: hidden;
     font-family: "Open Sans", sans-serif;
     font-weight: 300;
-    color: #003;
+    color: #333;
     background: #fff;
 }
 
+table.issue {
+    width:100%;
+    border-collapse: separate;
+    border-spacing: 0px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+table.issue th {
+    width: 25%;
+    padding: 4px;
+    text-align: left;
+    vertical-align: top;
+    color: #444;
+    background-color: #ccc;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+table.issue td{
+    padding: 4px;
+    background-color: #fafafa;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
 
 h1 { font-size: 140%; }
 h2 { font-size: 120%; }
+
+a, a:link, a:visited {
+    color:#3443fa;
+}
+a:active, a:hover {
+    color:#fa4334;
+}
+
+/* counters of headings */
+
+body {
+	counter-reset: chapter;
+}
+h1 {
+	counter-reset: section;
+}
+h1:before {
+	content: "Chapter " counter(chapter) ". ";
+	counter-increment: chapter;
+}
+h2:before {
+	content: counter(chapter) "." counter(section) " ";
+	counter-increment: section;
+}
