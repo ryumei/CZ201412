@@ -1,21 +1,48 @@
+CZ201412
+========================================================================
 
-# 事前準備
+Aggregate issues from multiple Redmines by Python.
 
-Redmine へのアクセスに [python-remine](http://python-redmine.readthedocs.org/) を、
-出力のテンプレートエンジンに [jinja2](http://jinja.pocoo.org/) を利用しています。
+## Description
 
-    $ easy_install python-redmine Jinja2
+Web 記事の連載 (未発表) でご紹介した内容のサンプルコードです。
 
-# 設定ファイルの配置
+## Demo
 
-    $ mv sample.conf.json conf.json
-
-Edit ``conf.json``
-
-# 実行例
+Just do it.
 
     $ python summary_redmines.py > output.html
 
-## 動作確認環境
+## Requirement
 
-Python 3.3
+* Python 2.x (or 3.x)
+* [python-remine](http://python-redmine.readthedocs.org/)
+* [jinja2](http://jinja.pocoo.org/)
+
+Tested on Python 2.7.6 on Windows
+
+## Usage
+
+    $ python summary_redmines.py > output.html
+
+## Install
+
+1. Fork or download source code.
+
+2. Get required libraries
+
+    $ easy_install python-redmine Jinja2
+
+3. Rename and edit configuration file ``conf.json``
+
+    $ mv sample.conf.json conf.json
+
+## Contribution
+
+## Licence
+
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+
+## Author
+
+[NAKAJIMA Takaaki](https://github.com/ryumei)
