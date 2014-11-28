@@ -1,9 +1,9 @@
 {
-    "site_a": {
-	"site": "http://site_a/redmine/",
+    "サイト A": {
+        "site": "http://site_a/redmine/"
     },
-    "site_b": {
-	"site": "http://site_b/redmine/",
-        "key": "API_KEY",
+    "サイト B": {
+        "site": "http://site_b/redmine/",
+        "key": "API_KEY"
     }
 }
