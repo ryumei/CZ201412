@@ -45,6 +45,7 @@ class Node(object):
         item_root = []
         for node in item_map.values():
             if (node.has_parent and (node.item.parent.id in item_map)):
+                #if (node.has_parent and (node.item.parent.id in item_map)):
                 parent_id = node.item.parent.id
                 item_map[parent_id].add_child(node)
             else:
