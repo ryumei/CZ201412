@@ -5,7 +5,7 @@ Aggregate issues from multiple Redmines by Python.
 
 ## Description
 
-Web 記事の連載 (未発表) でご紹介した内容のサンプルコードです。
+[Web 記事の連載](http://codezine.jp/article/detail/8331) でご紹介した内容のサンプルコードです。
 
 ## Demo
 
